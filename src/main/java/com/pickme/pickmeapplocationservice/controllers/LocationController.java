@@ -7,6 +7,7 @@ import com.pickme.pickmeapplocationservice.service.LocationService;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class LocationController {
         this.locationService = locationService;
     }
 
-    @PostMapping("/drivers")
+    @KafkaListener(topics = "PickMeApp-UpdateDriverLoc")
     public ResponseEntity<Boolean> saveDriverLocation(@RequestBody SaveDriverLocationRequestDto saveDriverLocationRequestDto) {
         try {
             Boolean response = locationService.saveDriverLocation(saveDriverLocationRequestDto.getDriverId(), saveDriverLocationRequestDto.getLatitude(), saveDriverLocationRequestDto.getLongitude());
